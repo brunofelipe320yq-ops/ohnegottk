@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070307">
+  <title>NEGO TTK — Sensibilidade & Painéis</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+    :root{--g:#4ade80;--y:#ffc107;--b:#00d4ff;--p:#ff0050;--grad:linear-gradient(90deg,#00f2ea,#ff0050);--grad2:linear-gradient(90deg,#4ade80,#22c55e);--grad3:linear-gradient(90deg,#00b5e9,#00d4ff)}
+    body{background:#070307;color:#fff;line-height:1.5}
+    .ambient{position:fixed;inset:0;pointer-events:none;opacity:.15;z-index:-1}
+    .ambient-1{background:radial-gradient(circle at 20% 20%,#ff005033,transparent 50%)}
+    .ambient-2{background:radial-gradient(circle at 80% 80%,#00f2ea33,transparent 50%)}
+    header{position:sticky;top:0;background:rgba(7,3,7,.7);backdrop-filter:blur(10px);z-index:99;padding:12px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.05)}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-logo{width:40px;height:40px;border-radius:10px;background:var(--grad);display:grid;place-items:center;font-weight:900;color:#000}
+    .top-actions{display:flex;gap:8px}
+    button{cursor:pointer;border:none;border-radius:10px;font-weight:600}
+    .icon-btn{width:40px;height:40px;background:rgba(255,255,255,.05);color:#fff}
+    .client-btn{padding:0 16px;height:40px;background:rgba(255,255,255,.05);color:#fff;display:flex;align-items:center;gap:6px}
+    main{max-width:1200px;margin:0 auto;padding:30px 5%;position:relative;z-index:1}
+    section{margin-bottom:50px}
+    .hero{text-align:center;margin:40px 0}
+    .eyebrow{color:var(--b);font-weight:600;margin-bottom:10px}
+    h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:15px}
+    h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .foto-principal{margin:25px 0}
+    .foto-principal img{width:100%;max-width:400px;border-radius:16px;display:block;margin:0 auto}
+    .redes-topo{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:25px 0}
+    .rede-topo-link{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);padding:10px 18px;border-radius:12px;text-decoration:none;color:#fff;transition:.3s;border:1px solid transparent}
+    .rede-topo-link:hover{background:rgba(255,255,255,.08);border-color:rgba(0,212,255,.3);transform:translateY(-2px)}
+    .main-actions{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+    .primary-btn,.secondary-btn{padding:14px 30px;font-size:16px}
+    .primary-btn{background:var(--grad2);color:#000}
+    .secondary-btn{background:rgba(255,255,255,.08);color:#fff}
+    .trust-card{display:flex;gap:20px;align-items:center;background:rgba(0,0,0,.5);padding:30px;border-radius:16px;border:1px solid rgba(255,255,255,.08);flex-wrap:wrap;backdrop-filter:blur(8px)}
+    .trust-side{text-align:center;flex:0 0 80px}
+    .seal{font-size:28px;margin-bottom:8px}
+    .gold{color:var(--y)}
+    .green{color:var(--g)}
+    .trust-content{flex:1;min-width:280px}
+    .gauge{margin-top:15px}
+    .gauge-fill{height:10px;background:var(--grad2);border-radius:10px;width:97%;margin-bottom:4px}
+    .gauge-value{font-weight:700;font-size:20px}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;text-align:center}
+    .stats b{font-size:24px;color:var(--b)}
+    .section-title{display:flex;align-items:center;gap:12px;margin-bottom:25px}
+    .section-title h2{font-size:22px}
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+    .product{background:rgba(0,0,0,.5);padding:25px;border-radius:16px;border:1px solid rgba(255,255,255,.08);position:relative;backdrop-filter:blur(8px)}
+    .tag{position:absolute;top:15px;right:15px;background:var(--y);color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+    .product h3{margin:20px 0 10px}
+    .product strong{display:block;margin:15px 0;font-size:22px;color:var(--g)}
+    .product button{width:100%;padding:12px;background:var(--y);color:#000;font-size:15px;font-weight:700}
+    .login-btn{width:100%;padding:16px;background:var(--grad3);color:#000;font-size:16px}
+    .notice{display:flex;align-items:center;gap:15px;background:rgba(74,222,128,.1);padding:20px;border-radius:14px;border:1px solid rgba(74,222,128,.2);backdrop-filter:blur(8px)}
+    .notice-icon{font-size:24px;color:var(--g)}
+    .support{position:fixed;bottom:25px;right:25px;background:#25d366;color:#fff;padding:14px 20px;border-radius:50px;box-shadow:0 4px 20px #25d36644;font-weight:700;z-index:999;cursor:pointer}
+    footer{text-align:center;padding:30px;color:#666;font-size:14px}
+    #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:15px 25px;border-radius:12px;box-shadow:0 4px 20px #0005;z-index:999;opacity:0;transition:.3s;max-width:90%}
+    #toast.mostrar{opacity:1}
+    .btn-sensi-gratis{width:100%;padding:16px;background:var(--grad);color:#000;font-size:18px;font-weight:900;border-radius:12px;margin-bottom:25px;border:none}
+    .lista-aparelhos{display:none;margin-bottom:25px}
+    .lista-aparelhos.ativo{display:block;animation:aparece .4s forwards}
+    @keyframes aparece{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    select{width:100%;padding:16px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:15px}
+    .redes-area{display:none;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:14px;padding:25px;margin-top:20px;backdrop-filter:blur(8px)}
+    .redes-area.ativo{display:block}
+    .redes-area h4{color:var(--g);text-align:center;margin-bottom:15px}
+    .rede-link{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.05);padding:14px;border-radius:12px;text-decoration:none;color:#fff;margin-bottom:10px}
+    .rede-link:hover{background:rgba(255,255,255,.1);transform:translateX(5px)}
+    .icone-rede{font-size:22px;width:30px;text-align:center}
+    .btn-zap-final{display:none;width:100%;padding:16px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;font-size:16px;font-weight:900;border-radius:12px;margin-top:20px;border:none;align-items:center;justify-content:center;gap:10px}
+    .btn-zap-final.ativo{display:flex}
+  </style>
+</head>
+<body>
+  <!-- VÍDEO DE FUNDO -->
+  <video autoplay muted loop playsinline id="video-fundo" style="position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;z-index:-2;opacity:0.4;">
+    <source src="fundo.mp4" type="video/mp4">
+  </video>
+
+  <div class="ambient ambient-1"></div>
+  <div class="ambient ambient-2"></div>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">NG</div>
+      <div><strong>NEGO TTK</strong><br><small>SMART SYSTEM</small></div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="notify('Sistema online ✅')">◉</button>
+      <button class="client-btn" onclick="scrollToSection('cliente')">♙ Cliente</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">🔥 NEGO TTK • ÁREA OFICIAL</p>
+      <h1>A TUA LOJA <span>NEGO TTK</span></h1>
+      <p>Sensibilidades, painéis, bots e sites. Tudo num só lugar.</p>
+
+      <!-- FOTINHA PRINCIPAL -->
+      <div class="foto-principal">
+        <img src="foto.jpg" alt="NEGO TTK">
+      </div>
+
+      <div class="redes-topo">
+        <a href="https://www.tiktok.com/@oh_nego_ttk" target="_blank" class="rede-topo-link">
+          <span class="rede-topo-icone">🎵</span><span class="rede-topo-nome">TikTok</span>
+        </a>
+        <a href="https://youtube.com/@oh_nego_ofc" target="_blank" class="rede-topo-link">
+          <span class="rede-topo-icone">▶️</span><span class="rede-topo-nome">YouTube</span>
+        </a>
+        <a href="https://discord.gg/6vb235uWC" target="_blank" class="rede-topo-link">
+          <span class="rede-topo-icone">💬</span><span class="rede-topo-nome">Discord</span>
+        </a>
+        <a href="https://instagram.com/oh_nego_ofc" target="_blank" class="rede-topo-link">
+          <span class="rede-topo-icone">📸</span><span class="rede-topo-nome">Instagram</span>
+        </a>
+        <a href="https://wa.me/5574998062818" target="_blank" class="rede-topo-link">
+          <span class="rede-topo-icone">💚</span><span class="rede-topo-nome">WhatsApp</span>
+        </a>
+      </div>
+      <div class="main-actions">
+        <button class="primary-btn" onclick="scrollToSection('pacotes')">🛍️ Ver pacotes</button>
+        <button class="secondary-btn" onclick="scrollToSection('sensi-gratis')">📱 Sensibilidade Grátis</button>
+      </div>
+    </section>
+
+    <section class="trust-card">
+      <div class="trust-side"><div class="seal gold">★</div><b>CERTIFICADO</b></div>
+      <div class="trust-content">
+        <h2>PROCURA UMA BOA PLAY?</h2>
+        <h3>Sensibilidade certa para o teu jogo</h3>
+        <p>Configurações estáveis e precisas para jogar melhor.</p>
+        <div class="gauge"><div class="gauge-fill"></div><div class="gauge-value">97%</div><small>CONFIANÇA</small></div>
+      </div>
+      <div class="trust-side"><div class="seal green">✓</div><b>VERIFICADO</b></div>
+    </section>
+
+    <section class="stats">
+      <div><b>24/7</b><br>Suporte</div>
+      <div><b>PIX</b><br>Pagamento rápido</div>
+      <div><b>📲</b><br>Comprovante no Zap</div>
+      <div><b>Chaves</b><br>Liberação na hora</div>
+    </section>
+
+    <section id="sensi-gratis">
+      <div class="section-title"><span>📱</span><h2>Sensibilidade Grátis</h2></div>
+      <p style="text-align:center;margin-bottom:20px">Clica no botão e escolhe o teu aparelho!</p>
+      <button class="btn-sensi-gratis" onclick="abrirListaAparelhos()">🔥 CLICA AQUI — PEGAR SENSI GRÁTIS 🔥</button>
+      <div class="lista-aparelhos" id="lista-aparelhos">
+        <select id="aparelho" onchange="verificarAparelho()">
+          <option value="">— Escolhe o teu aparelho —</option>
+          <optgroup label="🍎 iPhone">
+            <option value="iPhone 8">iPhone 8</option>
+            <option value="iPhone 11">iPhone 11</option>
+            <option value="iPhone 12">iPhone 12</option>
+            <option value="iPhone 13">iPhone 13</option>
+            <option value="iPhone 14">iPhone 14</option>
+            <option value="iPhone 15">iPhone 15</option>
+          </optgroup>
+          <optgroup label="📱 Samsung">
+            <option value="Samsung A03">Samsung A03</option>
+            <option value="Samsung A12">Samsung A12</option>
+            <option value="Samsung A50">Samsung A50</option>
+            <option value="Samsung A51">Samsung A51</option>
+            <option value="Samsung A52">Samsung A52</option>
+            <option value="Samsung A53">Samsung A53</option>
+            <option value="Samsung A54">Samsung A54</option>
+          </optgroup>
+          <optgroup label="🔴 Xiaomi">
+            <option value="Redmi 9">Redmi 9</option>
+            <option value="Redmi Note 10">Redmi Note 10</option>
+            <option value="Redmi Note 11">Redmi Note 11</option>
+            <option value="Redmi Note 12">Redmi Note 12</option>
+          </optgroup>
+          <optgroup label="🟢 Motorola">
+            <option value="Moto G8">Moto G8</option>
+            <option value="Moto G9">Moto G9</option>
+            <option value="Moto G20">Moto G20</option>
+            <option value="Moto G54">Moto G54</option>
+          </optgroup>
+          <optgroup label="⚫ Outros">
+            <option value="Infinix Hot 10">Infinix Hot 10</option>
+            <option value="Infinix Hot 12">Infinix Hot 12</option>
+            <option value="Infinix Hot 30">Infinix Hot 30</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="redes-area" id="redes-area">
+        <h4>✅ Agora segue-me em todas as redes!</h4>
+        <a href="https://www.tiktok.com/@oh_nego_ttk" target="_blank" class="rede-link">
+          <span class="icone-rede">🎵</span>
+          <div><strong>TikTok</strong><br><small>@oh_nego_ttk</small></div>
+        </a>
+        <a href="https://youtube.com/@oh_nego_ofc" target="_blank" class="rede-link">
+          <span class="icone-rede">▶️</span>
+          <div><strong>YouTube</strong><br><small>@oh_nego_ofc</small></div>
+        </a>
+        <a href="https://discord.gg/6vb235uWC" target="_blank" class="rede-link">
+          <span class="icone-rede">💬</span>
+          <div><strong>Discord</strong><br><small>Tropa do NG</small></div>
+        </a>
+        <a href="https://instagram.com/oh_nego_ofc" target="_blank" class="rede-link">
+          <span class="icone-rede">📸</span>
+          <div><strong>Instagram</strong><br><small>@oh_nego_ofc</small></div>
+        </a>
+        <p style="text-align:center;margin:15px 0;color:#888">Depois de seguir, clica abaixo 👇</p>
+        <button style="width:100%;padding:14px;background:var(--grad2);border-radius:10px;color:#000;font-weight:bold;border:none" onclick="liberarZap()">✅ Já segui! Continuar</button>
+      </div>
+      <button class="btn-zap-final" id="btn-zap-final" onclick="abrirWhatsAppFinal()">💚 IR PARA O WHATSAPP</button>
+    </section>
+
+    <section id="pacotes">
+      <div class="section-title"><span>🔥</span><h2>Pacotes — Já Paguei</h2></div>
+      <p style="text-align:center;margin-bottom:30px">Clica e envia o comprovante no WhatsApp</p>
+      <div class="product-grid">
+        <article class="product">
+          <span class="tag">POPULAR</span>
+          <h3>🎯 SENSI VIP</h3>
+          <p>Sensibilidade completa + dicas de mira.</p>
+          <strong>R$ 35,00</strong>
+          <button onclick="enviarPedido('SENSI VIP', 35)">💚 ENVIAR COMPROVANTE</button>
+        </article>
+        <article class="product">
+          <span class="tag">DESTAQUE</span>
+          <h3>🛡️ PAINEL VIP</h3>
+          <p>Painel completo + atualizações.</p>
+          <strong>R$ 45,00</strong>
+          <button onclick="enviarPedido('PAINEL VIP', 45)">💚 ENVIAR COMPROVANTE</button>
+        </article>
+        <article class="product">
+          <h3>⚡ PAINEL BÁSICO</h3>
+          <p>Configurações essenciais.</p>
+          <strong>R$ 30,00</strong>
+          <button onclick="enviarPedido('PAINEL BÁSICO', 30)">💚 ENVIAR COMPROVANTE</button>
+        </article>
+        <article class="product">
+          <span class="tag">NOVO</span>
+          <h3>🔧 OTIMIZAÇÃO</h3>
+          <p>Deixar o celular mais rápido.</p>
+          <strong>R$ 20,00</strong>
+          <button onclick="enviarPedido('OTIMIZAÇÃO', 20)">💚 ENVIAR COMPROVANTE</button>
+        </article>
+        <article class="product">
+          <span class="tag">VIP</span>
+          <h3>🔓 BYPASS</h3>
+          <p>Configuração de segurança.</p>
+          <strong>R$ 40,00</strong>
+          <button onclick="enviarPedido('BYPASS', 40)">💚 ENVIAR COMPROVANTE</button>
+        </article>
+        <article class="product">
+          <span class="tag">NOVO</span>
+          <h3>🤖 BOT DISCORD</h3>
+          <p>Bot personalizado.</p>
+          <strong>R$ 20,00</strong>
+          <button onclick="enviarPedido('BOT DISCORD', 20)">💚 ENVIAR COMPROVANTE</button>
+        </article>
+        <article class="product">
+          <span class="tag">SITE</span>
+          <h3>🌐 SITE SIMPLES</h3>
+          <p>Página profissional igual a esta.</p>
+          <strong>R$ 50,00</strong>
+          <button onclick="enviarPedido('SITE SIMPLES', 50)">💚 PEDIR ORÇAMENTO</button>
+        </article>
+        <article class="product">
+          <span class="tag">SITE</span>
+          <h3>🚀 SITE COMPLETO</h3>
+          <p>Tudo funcionando + domínio.</p>
+          <strong>R$ 150,00</strong>
+          <button onclick="enviarPedido('SITE COMPLETO', 150)">💚 PEDIR ORÇAMENTO</button>
+        </article>
+        <article class="product">
+          <span class="tag">SITE</span>
+          <h3>👑 SITE PREMIUM</h3>
+          <p>Exclusivo + manutenção.</p>
+          <strong>R$ 300,00</strong>
+          <button onclick="enviarPedido('SITE PREMIUM', 300)">💚 PEDIR ORÇAMENTO</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="cliente" class="trust-card">
+      <div class="trust-side"><div class="seal green">♙</div><b>ÁREA CLIENTE</b></div>
+      <div class="trust-content">
+        <h2>Meus Produtos</h2>
+        <p>Consulte compras, downloads e chaves pelo WhatsApp.</p>
+      </div>
+      <button class="login-btn" onclick="abrirZap('Quero acessar meus produtos')">ENTRAR →</button>
+    </section>
+
+    <section class="notice">
+      <span class="notice-icon">✓</span>
+      <div>
+        <strong>Compra Segura</strong><br>
+        Pague pelo PIX → envie o comprovante → receba no mesmo dia!
+      </div>
+    </section>
+  </main>
+
+  <!-- MÚSICA DE FUNDO -->
+  <audio id="musica" loop preload="auto">
+    <source src="musica.mp3" type="audio/mpeg">
+  
+
+  <button class="support" onclick="abrirZap('Tenho uma dúvida')">💚 DÚVIDAS</button>
+  <footer>© 2026 NEGO TTK — Todos os direitos reservados.</footer>
+  <div id="toast"></div>
+
+  <script>
+    const WHATSAPP = "5574998062818";
+    const CHAVE_PIX = "71996131117";
+    let aparelhoEscolhido = "";
+
+    // Toca música ao primeiro clique
+    document.addEventListener('click', function tocarSom() {
+      const som = document.getElementById('musica');
+      som.volume = 0.5;
+      som.play().catch(()=>{});
+      document.removeEventListener('click', tocarSom);
+    });
+
+    function notify(texto) {
+      const aviso = document.getElementById("toast");
+      aviso.textContent = texto;
+      aviso.classList.add("mostrar");
+      setTimeout(() => aviso.classList.remove("mostrar"), 3000);
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({behavior: "smooth"});
+    }
+
+    function abrirListaAparelhos() {
+      document.getElementById("lista-aparelhos").classList.add("ativo");
+      notify("📱 Escolhe o teu celular!");
+    }
+
+    function verificarAparelho() {
+      const valor = document.getElementById("aparelho").value;
+      if (!valor) return;
+      aparelhoEscolhido = valor;
+      document.getElementById("redes-area").classList.add("ativo");
+      notify(`✅ ${valor} escolhido! Segue as redes abaixo!`);
+    }
+
+    function liberarZap() {
+      if (!aparelhoEscolhido) {
+        notify("⚠️ Escolha o aparelho primeiro!");
+        return;
+      }
+      document.getElementById("redes-area").style.display = "none";
+      document.getElementById("btn-zap-final").classList.add("ativo");
+      notify("✅ Pronto! Clica no botão verde!");
+    }
+
+    function abrirWhatsAppFinal() {
+      if (!aparelhoEscolhido) return;
+      const mensagem = encodeURIComponent(
+        "Olá NEGO TTK! Já segui todas as redes! ✅\n\n" +
+        "Quero a sensibilidade grátis para: " + aparelhoEscolhido + "\n\n" +
+        "Aguardo! Obrigado! 🙌🔥"
+      );
+      window.open("https://wa.me/" + WHATSAPP + "?text=" + mensagem, "_blank");
+      notify("💚 Abrindo WhatsApp...");
+    }
+
+    function enviarPedido(nome, valor) {
+      const mensagem = encodeURIComponent(
+        "✅ PEDIDO — NEGO TTK 🔥\n\n" +
+        "Produto: " + nome + "\n" +
+        "Valor: R$ " + valor.toFixed(2).replace(".", ",") + "\n" +
+        "Chave PIX: " + CHAVE_PIX + "\n\n" +
+        "Já fiz o pagamento! Aqui está o comprovante 👇"
+      );
+      window.open("https://wa.me/" + WHATSAPP + "?text=" + mensagem, "_blank");
+      notify("💚 Abrindo WhatsApp...");
+    }
+
+    function abrirZap(texto) {
+      const mensagem = encodeURIComponent("Olá! " + texto + " 🙌");
+      window.open("https://wa.me/" + WHATSAPP + "?text=" + mensagem, "_blank");
+      notify("💚 Abrindo WhatsApp...");
+    }
+  </script>
+</body>
+</html>

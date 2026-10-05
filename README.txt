@@ -1,2 +1,8 @@
-Abra este projeto no Flutter. Execute: flutter pub get e depois flutter run -d chrome.
-Troque assets/header_reference.jpg pela sua arte/foto para deixar o cabeçalho 100% com a sua identidade.
+NEGO TTK — site inspirado no vídeo enviado
+Arquivos:
+- index.html
+- styles.css
+- script.js
+
+Abra o index.html no navegador.
+Os botões estão prontos visualmente e podem ser ligados depois ao Discord, Mercado Pago ou área de cliente.
